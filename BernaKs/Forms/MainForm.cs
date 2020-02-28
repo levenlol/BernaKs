@@ -1,4 +1,5 @@
-﻿using BernaKs.Utils;
+﻿using BernaKs.Memory;
+using BernaKs.Utils;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -8,6 +9,7 @@ namespace BernaKs
     public partial class MainForm : Form
     {
         private BMemory m_memory;
+        private MemoryNavigator m_MemoryNavigator;
 
         public MainForm()
         {
@@ -36,25 +38,23 @@ namespace BernaKs
 
         public void SetMemoryDataType(MemoryDataType memoryType, RoundType roundType)
         {
-            int dataSize = FlagsUtility.GetMemoryDataSize(memoryType);
+            // keep locally for now
+            //int dataSize = FlagsUtility.GetMemoryDataSize(memoryType);
 
-            switch (memoryType)
+            // #todo use params
+
+            Dictionary<IntPtr, byte[]> dictionary;
+
+            m_memory.ReadMemory(out dictionary);
+
+            byte[] buffer;
+            if(m_memory.ReadMemoryAt(0x00007FF739160000, 4, out buffer))
             {
-                case MemoryDataType.Byte_1:
-                    break;
-                case MemoryDataType.Byte_2:
-                    break;
-                case MemoryDataType.Byte_4:
-                    break;
-                case MemoryDataType.Byte_8:
-                    break;
-                case MemoryDataType.Integer:
-                    break;
-                case MemoryDataType.Float:
-                    break;
-                case MemoryDataType.Double:
-                    break;
+                int val = BitConverter.ToInt32(buffer, 0);
             }
+
+            m_MemoryNavigator = new MemoryNavigator(dictionary);
+            var l = m_MemoryNavigator.GetAddressOfValue(12345);
         }
 
         private void ResetUI()

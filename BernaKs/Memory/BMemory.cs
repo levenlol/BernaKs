@@ -111,6 +111,19 @@ public class BMemory
         return m_Process.MainModule.ModuleMemorySize;
     }
 
+    public bool ReadMemoryAt(long address, int bytesToRead, out byte[] buffer)
+    {
+        buffer = new byte[bytesToRead];
+        IntPtr read = new IntPtr();
+
+        MEMORY_BASIC_INFORMATION memInfo;
+        int dwLength = Marshal.SizeOf(typeof(MEMORY_BASIC_INFORMATION));
+
+        WrapperWinAPI.VirtualQueryEx(m_ProcessHandle, (IntPtr)address, out memInfo, dwLength);
+
+        return WrapperWinAPI.ReadProcessMemory(m_ProcessHandle, new IntPtr(address), buffer, bytesToRead, out read);
+    }
+
     public bool ReadMemory(out Dictionary<IntPtr, byte[]> dictionary)
     {
         SYSTEM_INFO sysInfo;
@@ -126,7 +139,7 @@ public class BMemory
 
         dictionary = new Dictionary<IntPtr, byte[]>();
 
-        while(current < end.ToInt64() && WrapperWinAPI.VirtualQueryEx(m_Process.Handle, (IntPtr)current, out memInfo, dwLength) != 0)
+        while(current <= end.ToInt64() && WrapperWinAPI.VirtualQueryEx(m_ProcessHandle, (IntPtr)current, out memInfo, dwLength) != 0)
         {
             if (memInfo.State == StateEnum.MEM_COMMIT && memInfo.Protect == AllocationProtectEnum.PAGE_READWRITE)
             {
@@ -135,7 +148,7 @@ public class BMemory
 
                 IntPtr baseAddr = new IntPtr((long)memInfo.BaseAddress);
 
-                if(WrapperWinAPI.ReadProcessMemory(m_ProcessHandle, baseAddr, buffer, memInfo.RegionSize.ToInt32(), out read))
+                if(WrapperWinAPI.ReadProcessMemory(m_ProcessHandle, baseAddr, buffer, buffer.Length, out read))
                 {
                     dictionary.Add(baseAddr, buffer);
                 }

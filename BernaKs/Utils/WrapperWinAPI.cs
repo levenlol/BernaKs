@@ -193,15 +193,17 @@ public enum TypeEnum : uint
 }
 
 [StructLayout(LayoutKind.Sequential)]
-public struct MEMORY_BASIC_INFORMATION
+public struct MEMORY_BASIC_INFORMATION // #todo ok for 32 bit applications
 {
     public IntPtr BaseAddress;
     public IntPtr AllocationBase;
     public AllocationProtectEnum AllocationProtect;
+    public int __alignment1;
     public IntPtr RegionSize;
     public StateEnum State;
     public AllocationProtectEnum Protect;
     public TypeEnum Type;
+    public int __alignment2;
 }
 
 [Flags]

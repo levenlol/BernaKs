@@ -3,8 +3,12 @@
 
 #include <iostream>
 #include <csignal>
+#include <chrono>
+#include <thread>
 
 bool bTerminationRequest = false;
+int number = 12345;
+
 
 void sigHandler(int signum)
 {
@@ -19,11 +23,11 @@ int main()
 	signal(SIGTERM, sigHandler);
 	signal(SIGINT, sigHandler);
 
+	printf("address of number is: %p \n", &number);
 
-	int number = 12345;
 	while (number != 50 || bTerminationRequest)
 	{
-
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
 
 	return 0;

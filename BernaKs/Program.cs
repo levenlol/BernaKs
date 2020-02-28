@@ -17,14 +17,14 @@ namespace BernaKs
 
             m_tutorialProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             m_tutorialProcess.StartInfo.Arguments = "--test"; // dont create window
-            m_tutorialProcess.StartInfo.FileName = System.IO.Directory.GetCurrentDirectory() + @"\..\..\..\..\x64\Debug\TutorialApp.exe";
+            m_tutorialProcess.StartInfo.FileName = System.IO.Directory.GetCurrentDirectory() + @"\..\..\..\..\Debug\TutorialApp.exe";
 
-            m_tutorialProcess.Start();
+            //m_tutorialProcess.Start();
         }
 
         ~TutorialProgramHandler()
         {
-            if(!m_tutorialProcess.HasExited)
+            if(m_tutorialProcess != null && !m_tutorialProcess.HasExited)
             {
                 m_tutorialProcess.Kill();
             }

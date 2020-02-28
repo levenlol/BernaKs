@@ -83,6 +83,7 @@
     <Compile Include="Forms\PickAProcessForm.Designer.cs">
       <DependentUpon>PickAProcessForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Memory\MemoryNavigator.cs" />
     <Compile Include="Meta\ByteReaderTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
