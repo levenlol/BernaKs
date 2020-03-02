@@ -108,5 +108,22 @@ namespace BernaKs
             QueryMemoryForm queryForm = new QueryMemoryForm();
             queryForm.ShowDialog();
         }
+
+        private void memoryDataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            int columnIndex = e.ColumnIndex;
+            int rowIndex = e.RowIndex;
+
+            string addressStr = memoryDataGridView.Rows[rowIndex].Cells["Address"].Value.ToString();
+            IntPtr address = new IntPtr(Convert.ToInt64(addressStr, 16));
+
+            string valueStr = memoryDataGridView.Rows[rowIndex].Cells["Value"].Value.ToString();
+            int value = int.Parse(valueStr);
+
+            if (m_memory.WriteMemory(address, BitConverter.GetBytes(value)))
+            {
+
+            }
+        }
     }
 }

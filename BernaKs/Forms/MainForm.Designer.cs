@@ -34,10 +34,10 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.layoutProcessHandle = new System.Windows.Forms.FlowLayoutPanel();
             this.memoryDataGridView = new System.Windows.Forms.DataGridView();
-            this.queryMemoryButton = new System.Windows.Forms.Button();
             this.Address = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RawValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.queryMemoryButton = new System.Windows.Forms.Button();
             this.flowLayoutPanel1.SuspendLayout();
             this.layoutProcessHandle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.memoryDataGridView)).BeginInit();
@@ -100,16 +100,7 @@
             this.memoryDataGridView.Name = "memoryDataGridView";
             this.memoryDataGridView.Size = new System.Drawing.Size(773, 491);
             this.memoryDataGridView.TabIndex = 0;
-            // 
-            // queryMemoryButton
-            // 
-            this.queryMemoryButton.Location = new System.Drawing.Point(344, 25);
-            this.queryMemoryButton.Name = "queryMemoryButton";
-            this.queryMemoryButton.Size = new System.Drawing.Size(104, 23);
-            this.queryMemoryButton.TabIndex = 0;
-            this.queryMemoryButton.Text = "Query Memory";
-            this.queryMemoryButton.UseVisualStyleBackColor = true;
-            this.queryMemoryButton.Click += new System.EventHandler(this.queryMemoryButton_Click);
+            this.memoryDataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.memoryDataGridView_CellEndEdit);
             // 
             // Address
             // 
@@ -128,6 +119,16 @@
             // 
             this.RawValue.HeaderText = "RawValue";
             this.RawValue.Name = "RawValue";
+            // 
+            // queryMemoryButton
+            // 
+            this.queryMemoryButton.Location = new System.Drawing.Point(344, 25);
+            this.queryMemoryButton.Name = "queryMemoryButton";
+            this.queryMemoryButton.Size = new System.Drawing.Size(104, 23);
+            this.queryMemoryButton.TabIndex = 0;
+            this.queryMemoryButton.Text = "Query Memory";
+            this.queryMemoryButton.UseVisualStyleBackColor = true;
+            this.queryMemoryButton.Click += new System.EventHandler(this.queryMemoryButton_Click);
             // 
             // MainForm
             // 
