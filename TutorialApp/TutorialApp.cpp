@@ -5,10 +5,12 @@
 #include <csignal>
 #include <chrono>
 #include <thread>
+#include "BaseTutorial.h"
+#include "FirstTutorial.h"
+
+#define TUTORIALS_NUM 1
 
 bool bTerminationRequest = false;
-int number = 12345;
-
 
 void sigHandler(int signum)
 {
@@ -23,13 +25,25 @@ int main()
 	signal(SIGTERM, sigHandler);
 	signal(SIGINT, sigHandler);
 
-	printf("address of number is: %p \n", &number);
+	BaseTutorial* Tutorials[TUTORIALS_NUM]{ new FirstTutorial() };
+	int CurrentTutorialIndex = 0;
 
-	while (number != 50 || bTerminationRequest)
+	while (CurrentTutorialIndex < TUTORIALS_NUM && !bTerminationRequest)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+		if (Tutorials[CurrentTutorialIndex]->Check())
+		{
+			CurrentTutorialIndex++;
+		}
+	}
+
+	for (BaseTutorial* t : Tutorials)
+	{
+		delete t;
 	}
 
 	return 0;
 }
 
+#undef TUTORIALS_NUM

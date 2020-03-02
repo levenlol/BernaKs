@@ -29,7 +29,7 @@ namespace BernaKs
                 dataPickerBox.Items.Add(memoryTypeStr);
             }
 
-            dataPickerBox.SelectedIndex = 0;
+            dataPickerBox.SelectedIndex = 4;
         }
 
         private void FillRoundPicker()
@@ -44,12 +44,18 @@ namespace BernaKs
 
         private void okButton_Click(object sender, EventArgs e)
         {
+            if(valueToQueryTextBox.Text.Length == 0)
+            {
+                MessageBox.Show("Missing value to query", "Value missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             MainForm form = (MainForm)Application.OpenForms[0];
 
             MemoryDataType memoryType = ((MemoryDataType[])Enum.GetValues(typeof(MemoryDataType)))[dataPickerBox.SelectedIndex];
             RoundType roundType = ((RoundType[])Enum.GetValues(typeof(RoundType)))[roundComboBox.SelectedIndex];
 
-            form.SetMemoryDataType(memoryType, roundType);
+            form.SetMemoryDataType(memoryType, roundType, BitConverter.GetBytes(int.Parse(valueToQueryTextBox.Text)));
             Close();
         }
     }

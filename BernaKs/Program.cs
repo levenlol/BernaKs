@@ -19,15 +19,16 @@ namespace BernaKs
             m_tutorialProcess.StartInfo.Arguments = "--test"; // dont create window
             m_tutorialProcess.StartInfo.FileName = System.IO.Directory.GetCurrentDirectory() + @"\..\..\..\..\Debug\TutorialApp.exe";
 
-            //m_tutorialProcess.Start();
+            m_tutorialProcess.Start();
         }
 
         ~TutorialProgramHandler()
         {
-            if(m_tutorialProcess != null && !m_tutorialProcess.HasExited)
+            try
             {
                 m_tutorialProcess.Kill();
             }
+            catch { Console.WriteLine("Cannot kill tutorial process. might already be dead."); }
         }
     }
 
@@ -36,7 +37,7 @@ namespace BernaKs
         [STAThread]
         static void Main()
         {
-            TutorialProgramHandler tutorial = new TutorialProgramHandler();
+            // TutorialProgramHandler tutorial = new TutorialProgramHandler();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

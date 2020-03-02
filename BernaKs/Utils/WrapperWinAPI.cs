@@ -25,6 +25,9 @@ namespace BernaKs.Utils
         [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool IsWow64Process([In] IntPtr process, [Out] out bool wow64Process);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, uint nSize, out int lpNumberOfBytesWritten);
     }
 
     public static class FlagsUtility

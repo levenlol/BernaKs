@@ -18,7 +18,7 @@ namespace BernaKs.Memory
         public MemoryNavigator(Dictionary<IntPtr, byte[]> memoryDictionary)
         {
             m_MemoryDictionary = memoryDictionary;
-            BuildDataAsInt();
+            //BuildDataAsInt();
         }
 
         public Dictionary<IntPtr, int[]> BuildDataAsInt()
@@ -46,17 +46,22 @@ namespace BernaKs.Memory
             return m_MemoryDictionary_int;
         }
 
-        public List<IntPtr> GetAddressOfValue(int value)
+        public List<IntPtr> GetAddressOfValue(byte[] data)
         {
             List<IntPtr> ptrsList = new List<IntPtr>();
+            int size = data.Length;
 
-            foreach(IntPtr p in m_MemoryDictionary_int.Keys)
+            foreach(IntPtr p in m_MemoryDictionary.Keys)
             {
-                foreach(int v in m_MemoryDictionary_int[p])
+                int length = m_MemoryDictionary[p].Length;
+                for (int i = 0; i < length / size; i++)
                 {
-                    if(v == value)
+                    byte[] currentChunk = new byte[size];
+                    Array.Copy(m_MemoryDictionary[p], i * size, currentChunk, 0, size);
+
+                    if (data.SequenceEqual(currentChunk))
                     {
-                        ptrsList.Add(new IntPtr(p.ToInt64())); // #note just working on x64 for now.
+                        ptrsList.Add(new IntPtr(p.ToInt64() + (long)i * size));
                     }
                 }
             }

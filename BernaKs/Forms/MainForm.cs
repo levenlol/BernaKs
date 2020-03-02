@@ -2,6 +2,8 @@
 using BernaKs.Utils;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 
 namespace BernaKs
@@ -22,7 +24,7 @@ namespace BernaKs
         private void button1_Click(object sender, EventArgs e)
         {
             PickAProcessForm pickProcessForm = new PickAProcessForm();
-            pickProcessForm.Show();
+            pickProcessForm.ShowDialog();
         }
 
         public void RequestBindToProcess(Object sender, int processID)
@@ -36,25 +38,35 @@ namespace BernaKs
             ResetUI();
         }
 
-        public void SetMemoryDataType(MemoryDataType memoryType, RoundType roundType)
+        private void BuildMemoryGridView(ref List<IntPtr> ValueAddresses, int value, byte[] rawData)
         {
-            // keep locally for now
-            //int dataSize = FlagsUtility.GetMemoryDataSize(memoryType);
-
-            // #todo use params
-
-            Dictionary<IntPtr, byte[]> dictionary;
-
-            m_memory.ReadMemory(out dictionary);
-
-            byte[] buffer;
-            if(m_memory.ReadMemoryAt(0x00007FF739160000, 4, out buffer))
+            // #todo only int supported
+            string[][] rows = new string[ValueAddresses.Count][];
+            for (int i = 0; i < ValueAddresses.Count; i++)
             {
-                int val = BitConverter.ToInt32(buffer, 0);
+                rows[i] = new string[] { "0x" + ValueAddresses[i].ToInt64().ToString("X16"), value.ToString(), Encoding.Default.GetString(rawData) };
             }
 
+            memoryDataGridView.Rows.Clear();
+
+            foreach (string[] row in rows)
+            {
+                memoryDataGridView.Rows.Add(row);
+            }
+        }
+
+        public void SetMemoryDataType(MemoryDataType memoryType, RoundType roundType, byte[] data)
+        {
+            // #todo we are just using byte data for now.
+
+            Dictionary<IntPtr, byte[]> dictionary;
+            m_memory.ReadMemory(out dictionary);
+
+            List<IntPtr> ValueAddresses = new List<IntPtr>();
             m_MemoryNavigator = new MemoryNavigator(dictionary);
-            var l = m_MemoryNavigator.GetAddressOfValue(12345);
+            ValueAddresses = m_MemoryNavigator.GetAddressOfValue(data);
+
+            BuildMemoryGridView(ref ValueAddresses, BitConverter.ToInt32(data, 0), data);
         }
 
         private void ResetUI()
@@ -69,6 +81,7 @@ namespace BernaKs
             bool showWidgets = IsMemoryObjectValid();
 
             layoutProcessHandle.Visible = showWidgets;
+            queryMemoryButton.Visible = showWidgets;
         }
 
         private void ResetProcessName()
@@ -93,7 +106,7 @@ namespace BernaKs
                 return;
 
             QueryMemoryForm queryForm = new QueryMemoryForm();
-            queryForm.Show();
+            queryForm.ShowDialog();
         }
     }
 }

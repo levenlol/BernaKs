@@ -31,6 +31,7 @@
             this.dataPickerBox = new System.Windows.Forms.ComboBox();
             this.roundComboBox = new System.Windows.Forms.ComboBox();
             this.okButton = new System.Windows.Forms.Button();
+            this.valueToQueryTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // dataPickerBox
@@ -63,11 +64,19 @@
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
+            // valueToQueryTextBox
+            // 
+            this.valueToQueryTextBox.Location = new System.Drawing.Point(35, 130);
+            this.valueToQueryTextBox.Name = "valueToQueryTextBox";
+            this.valueToQueryTextBox.Size = new System.Drawing.Size(195, 20);
+            this.valueToQueryTextBox.TabIndex = 3;
+            // 
             // QueryMemoryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(271, 363);
+            this.Controls.Add(this.valueToQueryTextBox);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.roundComboBox);
             this.Controls.Add(this.dataPickerBox);
@@ -76,6 +85,7 @@
             this.Name = "QueryMemoryForm";
             this.Text = "QueryMemoryForm";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -84,5 +94,6 @@
         private System.Windows.Forms.ComboBox dataPickerBox;
         private System.Windows.Forms.ComboBox roundComboBox;
         private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.TextBox valueToQueryTextBox;
     }
 }

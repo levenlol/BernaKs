@@ -116,16 +116,25 @@ public class BMemory
         buffer = new byte[bytesToRead];
         IntPtr read = new IntPtr();
 
+#if DEBUG
         MEMORY_BASIC_INFORMATION memInfo;
         int dwLength = Marshal.SizeOf(typeof(MEMORY_BASIC_INFORMATION));
 
         WrapperWinAPI.VirtualQueryEx(m_ProcessHandle, (IntPtr)address, out memInfo, dwLength);
+#endif
 
         return WrapperWinAPI.ReadProcessMemory(m_ProcessHandle, new IntPtr(address), buffer, bytesToRead, out read);
     }
 
     public bool ReadMemory(out Dictionary<IntPtr, byte[]> dictionary)
     {
+        dictionary = new Dictionary<IntPtr, byte[]>();
+
+        if (!IsBound())
+        {
+            return false;
+        }
+
         SYSTEM_INFO sysInfo;
         WrapperWinAPI.GetSystemInfo(out sysInfo);
 
@@ -136,8 +145,6 @@ public class BMemory
 
         MEMORY_BASIC_INFORMATION memInfo;
         int dwLength = Marshal.SizeOf(typeof(MEMORY_BASIC_INFORMATION));
-
-        dictionary = new Dictionary<IntPtr, byte[]>();
 
         while(current <= end.ToInt64() && WrapperWinAPI.VirtualQueryEx(m_ProcessHandle, (IntPtr)current, out memInfo, dwLength) != 0)
         {
@@ -159,6 +166,17 @@ public class BMemory
         }
 
         return dictionary.Count > 0;
+    }
+
+    public bool WriteMemory(IntPtr address, byte[] bufferToWrite)
+    {
+        if(!IsBound() || bufferToWrite.Length == 0)
+        {
+            return false;
+        }
+
+        int writeBytes = 0;
+        return WrapperWinAPI.WriteProcessMemory(m_ProcessHandle, address, bufferToWrite, (uint)bufferToWrite.Length, out writeBytes);
     }
 
     public void Release()
