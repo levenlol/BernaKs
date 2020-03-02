@@ -55,8 +55,15 @@ namespace BernaKs
             MemoryDataType memoryType = ((MemoryDataType[])Enum.GetValues(typeof(MemoryDataType)))[dataPickerBox.SelectedIndex];
             RoundType roundType = ((RoundType[])Enum.GetValues(typeof(RoundType)))[roundComboBox.SelectedIndex];
 
-            form.SetMemoryDataType(memoryType, roundType, BitConverter.GetBytes(int.Parse(valueToQueryTextBox.Text)));
-            Close();
+            try
+            {
+                form.SetMemoryDataType(memoryType, roundType, BitConverter.GetBytes(int.Parse(valueToQueryTextBox.Text)));
+                Close();
+            }
+            catch
+            {
+                MessageBox.Show("Invalid value", "Invalid value", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

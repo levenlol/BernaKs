@@ -10,6 +10,7 @@ bool FirstTutorial::Check_Internal()
 
 void FirstTutorial::OnActivation()
 {
+	std::cout << "Current value is: " << ChangeMe << "\n";
 	std::cout << "Starting first tutorial. Variable address is: " << &ChangeMe << "  - The expected value is: " << FIRST_TUTORIAL_EXPECTED_VALUE << "\n";
 }
 

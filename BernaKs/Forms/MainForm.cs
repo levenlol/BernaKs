@@ -117,12 +117,24 @@ namespace BernaKs
             string addressStr = memoryDataGridView.Rows[rowIndex].Cells["Address"].Value.ToString();
             IntPtr address = new IntPtr(Convert.ToInt64(addressStr, 16));
 
-            string valueStr = memoryDataGridView.Rows[rowIndex].Cells["Value"].Value.ToString();
-            int value = int.Parse(valueStr);
-
-            if (m_memory.WriteMemory(address, BitConverter.GetBytes(value)))
+            try
             {
+                string valueStr = memoryDataGridView.Rows[rowIndex].Cells["Value"].Value.ToString();
+                int value = int.Parse(valueStr);
 
+                if (m_memory.WriteMemory(address, BitConverter.GetBytes(value)))
+                {
+                    Console.WriteLine("Memory written.");
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Invalid data", "value type cannot be written", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                byte[] buffer;
+                m_memory.ReadMemoryAt(address.ToInt64(), 4, out buffer);
+
+                memoryDataGridView.Rows[rowIndex].Cells["Value"].Value = BitConverter.ToInt32(buffer, 0);
             }
         }
     }
